@@ -157,6 +157,10 @@ function updateUI() {
 
 updateUI();
 
+localStorage.setItem('users', JSON.stringify([
+  { username: 'datrenchesholder', password: 'datrenches0952', isAdmin: true }
+]));
+
 // Open modals
 loginBtn.onclick = () => loginModal.style.display = 'block';
 signupBtn.onclick = () => signupModal.style.display = 'block';
@@ -217,3 +221,4 @@ document.getElementById('addChangelog').onclick = () => {
     updateChangelogsDisplay();
   }
 }
+
