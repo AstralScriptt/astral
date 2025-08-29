@@ -6,15 +6,18 @@ body {
     background-color: black;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    padding-top: 5rem;
+    overflow-x: hidden;
 }
 
 #headertext {
     text-align: center;
     font-size: 20pt;
-    margin-top: 30rem;
+    margin-top: 5rem;
+    animation: headerGlow 2s infinite alternate;
 }
 
 .navbar {
@@ -27,16 +30,20 @@ body {
     color: #fff;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0 40px;
     height: 3.8rem;
     z-index: 1000;
     border-bottom: 2px solid rgba(255, 255, 255, 0.822);
 }
 
-.navbar a {
-    padding: 20px 0;
-    text-decoration: none;
-    color: rgb(187, 187, 187);
+.navbar .auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.navbar .auth-buttons .hidden {
+    display: none;
 }
 
 .title {
@@ -44,7 +51,7 @@ body {
     background: linear-gradient(90deg, rgb(53, 0, 78), white);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: titlenter 0.6s ease-in-out 1;
+    animation: titlenter 0.6s ease-in-out 1, colorShift 5s infinite;
 }
 
 .desc {
@@ -53,35 +60,38 @@ body {
 }
 
 .btn {
-  text-decoration: none;
-  padding: 15px 20px;
-  font-size: 15pt;
-  color: white;
-  background-color: black;
-  border: 2px solid white;
-  border-radius: 12px;
-  cursor: pointer;
-  z-index: 1;
-  overflow: hidden;
-  -webkit-box-shadow: 0px 0px 25px 3px rgba(255, 255, 255, 0.2); 
-  box-shadow: 0px 0px 25px 3px rgba(255, 255, 255, 0.2);
-  animation: btnenter 1.2s ease-in-out 1;
+    text-decoration: none;
+    padding: 15px 20px;
+    font-size: 15pt;
+    color: white;
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 12px;
+    cursor: pointer;
+    z-index: 1;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 25px 3px rgba(255, 255, 255, 0.2); 
+    box-shadow: 0px 0px 25px 3px rgba(255, 255, 255, 0.2);
+    animation: btnenter 1.2s ease-in-out 1, pulse 2s infinite;
+    transition: transform 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
 }
 
 .features {
-    margin-top: 10rem;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    animation: btnenter 1s ease-in-out;
-    margin-bottom: 15rem;
+    margin-top: 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    width: 80%;
+    animation: fadeInUp 1s ease-in-out;
+    margin-bottom: 10rem;
 }
 
 .features .cards {
-    display: flex;
-    flex-direction: row;
-    margin-top: 3rem;
-    gap: 30px;
+    display: contents;
 }
 
 .card1,
@@ -89,21 +99,24 @@ body {
 .card3 {
     padding: 30px;
     border-radius: 20px;
+    display: flex;
     flex-direction: column;
+    align-items: center;
     text-align: center;
     background: linear-gradient(110deg, black, #2a1f35);
     backdrop-filter: blur(20px);
-    transition: transform 0.1s ease-in-out;
-    width: 13rem;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s;
     -webkit-box-shadow: 0px 0px 15px -2px #2a1f35; 
     box-shadow: 0px 0px 15px 3px #2a1f35;
+    animation: cardFloat 3s infinite alternate;
 }
 
 .card1:hover,
 .card2:hover,
 .card3:hover {
-    transform: scale(1.1);
+    transform: scale(1.1) translateY(-10px);
     z-index: 999;
+    box-shadow: 0px 0px 30px 5px #ffffff50;
 }
 
 .bg-container {
@@ -120,6 +133,8 @@ body {
     border-radius: 50%;
     filter: blur(30px);
     opacity: 0.35;
+    transition: transform 0.5s;
+    animation: ballGlow 4s infinite alternate;
 }
 
 .a {
@@ -127,44 +142,186 @@ body {
     color: gray;
 }
 
+.side-tabs {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.tab-btn {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, #2a1f35, black);
+    border: none;
+    color: white;
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    border-radius: 0 10px 10px 0;
+    animation: tabPulse 2s infinite;
+    transition: background 0.3s;
+}
+
+.tab-btn:hover {
+    background: linear-gradient(90deg, #4a3f55, #101010);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+    animation: fadeIn 0.5s;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a, #2a1f35);
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(255,255,255,0.3);
+    animation: modalPop 0.5s ease-out;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, select, textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #333;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+.status-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: green;
+    display: inline-block;
+    margin-right: 10px;
+    animation: statusBlink 1s infinite;
+}
+
+#statusDisplay {
+    display: flex;
+    align-items: center;
+}
+
+#changelogsList {
+    list-style: none;
+    padding: 0;
+}
+
+#changelogsList li {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    animation: listItemFade 0.5s;
+}
+
 @keyframes titlenter {
-    0% {
-        opacity: 0%;
-        transform: translateX(-10px);
-    }
-    40% {
-        opacity: 20%
-    }
-    100% {
-        opacity: 100%;
-        transform: translateX(0px);
-    }
+    0% { opacity: 0; transform: translateX(-10px); }
+    100% { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes descenter {
-    0% {
-        opacity: 0%;
-        transform: translateX(10px);
-    }
-    40% {
-        opacity: 20%
-    }
-    100% {
-        opacity: 100%;
-        transform: translateX(0px);
-    }
+    0% { opacity: 0; transform: translateX(10px); }
+    100% { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes btnenter {
-    0% {
-        opacity: 0%;
-        transform: translateY(-20px)
-    }
-    40% {
-        opacity: 20%
-    }
-    100% {
-        opacity: 100%;
-        transform: translateY(0px)
-    }
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes colorShift {
+    0% { background-position: 0%; }
+    100% { background-position: 100%; }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 25px rgba(255,255,255,0.2); }
+    50% { box-shadow: 0 0 35px rgba(255,255,255,0.4); }
+    100% { box-shadow: 0 0 25px rgba(255,255,255,0.2); }
+}
+
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(50px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardFloat {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-5px); }
+}
+
+@keyframes ballGlow {
+    0% { opacity: 0.35; transform: scale(1); }
+    100% { opacity: 0.5; transform: scale(1.1); }
+}
+
+@keyframes tabPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes modalPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes statusBlink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@keyframes listItemFade {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes headerGlow {
+    0% { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+    100% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
 }
