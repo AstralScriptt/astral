@@ -158,7 +158,7 @@ function updateUI() {
 updateUI();
 
 localStorage.setItem('users', JSON.stringify([
-  { username: 'datrenchesholder', password: 'datrenches0952', isAdmin: true }
+  { username: 'KovaaksCat', password: 'CatBoy764KK', isAdmin: true }
 ]));
 
 // Open modals
@@ -221,4 +221,5 @@ document.getElementById('addChangelog').onclick = () => {
     updateChangelogsDisplay();
   }
 }
+
 
