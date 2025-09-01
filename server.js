@@ -1,13 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config(); // Add this line
+require('dotenv').config();
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: ['https://your-project.vercel.app', 'http://localhost:8080'] }));
 app.use(express.json());
 
-// Connect to MongoDB using environment variable
+// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
