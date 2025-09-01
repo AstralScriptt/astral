@@ -325,3 +325,16 @@ input, select, textarea {
     0% { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
     100% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
 }
+
+#configForm label {
+    font-size: 16pt;
+    margin-top: 10px;
+}
+#configForm input[type="checkbox"] {
+    margin-right: 5px;
+}
+#configForm input[type="text"],
+#configForm input[type="number"] {
+    margin-bottom: 10px;
+}
+
