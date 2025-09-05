@@ -288,7 +288,7 @@ function startCarGame() {
     spawnPolice(5); // Start with 5 police
     controlContainer.style.display = 'block';
     updateCarGame();
-  }, 3000); // 3 seconds loading
+  }, 4000); // 4 seconds loading
 }
 function stopCarGame() {
   carGameRunning = false;
