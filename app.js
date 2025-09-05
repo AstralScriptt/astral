@@ -88,7 +88,7 @@ function drawHyperRealisticCar(ctx, x, y, color, isPolice = false) {
   ctx.lineTo(x + 5, y + height);
   ctx.quadraticCurveTo(x, y + height - 10, x, y + height - 20);
   ctx.lineTo(x, y + 20);
-  ctx.quadraticCurveTo(x, y + 10, x + 5, y);
+  ctx.quadraticFitTo(x, y + 10, x + 5, y);
   ctx.fill();
 
   // Windows
@@ -258,37 +258,16 @@ function updateCarGame() {
   }
   if (carGameRunning) carAnimationFrame = requestAnimationFrame(updateCarGame);
 }
-const loadingScreen = document.createElement('div');
-loadingScreen.style.position = 'fixed';
-loadingScreen.style.top = '0';
-loadingScreen.style.left = '0';
-loadingScreen.style.width = '100%';
-loadingScreen.style.height = '100%';
-loadingScreen.style.background = '#000';
-loadingScreen.style.color = '#fff';
-loadingScreen.style.display = 'flex';
-loadingScreen.style.alignItems = 'center';
-loadingScreen.style.justifyContent = 'center';
-loadingScreen.style.fontSize = '24px';
-loadingScreen.style.zIndex = '1001';
-loadingScreen.style.textAlign = 'center';
-loadingScreen.innerHTML = 'Brailyn idk if i spelt your name wrong but this the beta version of the game itle be more realistic soon i tried my best ngl<br><br>Loading...';
-document.body.appendChild(loadingScreen);
-
 function startCarGame() {
   if (carGameRunning) return;
-  loadingScreen.style.display = 'flex';
-  setTimeout(() => {
-    loadingScreen.style.display = 'none';
-    carGameRunning = true;
-    policeCars = [];
-    carStartTime = Date.now();
-    carLevel = 1;
-    carStars = 1;
-    spawnPolice(5); // Start with 5 police
-    controlContainer.style.display = 'block';
-    updateCarGame();
-  }, 4); // 4 seconds loading
+  carGameRunning = true;
+  policeCars = [];
+  carStartTime = Date.now();
+  carLevel = 1;
+  carStars = 1;
+  spawnPolice(5); // Start with 5 police
+  controlContainer.style.display = 'block';
+  updateCarGame();
 }
 function stopCarGame() {
   carGameRunning = false;
@@ -426,4 +405,3 @@ document.getElementById('customizeForm').onsubmit = (e) => {
   carPlayer.boost = parseFloat(document.getElementById('speedBoost').value);
   customizeModal.style.display = 'none';
 };
-
