@@ -1,12 +1,14 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* System fonts for faster loading */
 }
+
 body {
-    background: linear-gradient(to bottom, #000000, #4b0082); /* Awesome gradient */
+    background: #000000; /* Simplified to solid color for performance */
     overflow-x: hidden;
 }
+
 .bg-container {
     position: absolute;
     top: 0;
@@ -14,126 +16,143 @@ body {
     width: 100%;
     z-index: -1;
 }
+
 .ball {
     position: absolute;
     border-radius: 50%;
-    opacity: .6;
-    animation: glow 2s infinite alternate;
+    opacity: 0.6;
+    /* Removed glow animation to reduce CPU usage */
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
-@keyframes glow {
-    from { box-shadow: 0 0 10px rgba(255,255,255,0.5); }
-    to { box-shadow: 0 0 30px rgba(255,255,255,1); }
-}
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #000000a2;
-    backdrop-filter: blur(10px);
-    padding: 10px 20px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.8); /* Simplified background, removed blur */
+    padding: 8px 16px; /* Reduced padding */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Simplified shadow */
 }
+
 .banner {
     color: white;
+    font-size: 1.2rem; /* Responsive font size */
 }
+
 .hidden {
     display: none;
 }
+
 #headertext {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 50px; /* Reduced margin for smaller screens */
     color: white;
-    text-shadow: 0 0 10px #ffffff;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5); /* Simplified shadow */
 }
+
 .title {
-    font-size: 50pt;
-    animation: pulse 2s infinite;
+    font-size: clamp(2rem, 5vw, 2.5rem); /* Responsive font size */
+    /* Removed pulse animation for performance */
 }
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
+
 .desc {
-    font-size: 25pt;
+    font-size: clamp(1rem, 3vw, 1.2rem); /* Responsive font size */
     color: #ffff00;
 }
+
 .joinbtn {
-    background: linear-gradient(#ff69b4, #b266ff);
+    background: #ff69b4; /* Simplified to single color */
     color: white;
     border: none;
-    padding: 15px 30px;
-    border-radius: 10px;
+    padding: 10px 20px; /* Reduced padding */
+    border-radius: 8px;
     text-decoration: none;
-    box-shadow: 0 0 15px #ff69b4;
+    box-shadow: 0 0 5px rgba(255,105,180,0.5); /* Simplified shadow */
 }
+
 .joinbtn:hover {
-    transform: scale(1.1);
+    background: #e55a9f; /* Simplified hover effect */
 }
+
 .games {
-    margin: 50px auto;
+    margin: 20px auto; /* Reduced margin */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: 20px; /* Reduced gap */
 }
+
 .game-card {
-    background: #ffffff1c;
-    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.1); /* Simplified background, no blur */
     color: white;
-    padding: 30px;
-    border: 1px solid #ffffff3d;
-    border-radius: 20px;
-    width: 850px;
+    padding: 15px; /* Reduced padding */
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    width: 90%; /* Responsive width */
+    max-width: 600px; /* Smaller max-width for mobile */
     text-align: center;
-    box-shadow: 0 0 30px rgba(255,255,255,0.3);
+    box-shadow: 0 0 10px rgba(0,0,0,0.3); /* Simplified shadow */
 }
+
 .game-card h2 {
-    font-size: 30pt;
+    font-size: clamp(1.5rem, 4vw, 1.8rem); /* Responsive font size */
+    margin-bottom: 8px;
+}
+
+.game-card p {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
     margin-bottom: 10px;
 }
-.game-card p {
-    font-size: 16pt;
-    margin-bottom: 20px;
-}
+
 canvas {
-    border: 2px solid #ffffff;
-    border-radius: 10px;
+    border: 1px solid #ffffff; /* Thinner border */
+    border-radius: 8px;
     background: #000000;
+    width: 100%; /* Responsive canvas */
+    max-width: 600px; /* Limit size for mobile */
+    height: auto; /* Maintain aspect ratio */
 }
+
 .game-controls {
-    margin-top: 20px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 10px; /* Reduced gap */
 }
+
 .btn {
-    background: linear-gradient(#d199ff, #b266ff);
+    background: #b266ff; /* Single color for performance */
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
+    padding: 8px 16px; /* Reduced padding */
+    border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 0 10px #d199ff;
+    box-shadow: 0 0 5px rgba(178,102,255,0.5); /* Simplified shadow */
 }
+
 .btn:hover {
-    transform: scale(1.05);
+    background: #9b55cc; /* Simplified hover effect */
 }
+
 #carStatus, #footballScore {
-    margin-top: 10px;
-    font-size: 18pt;
+    margin-top: 8px;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
+
 #missionBoard {
-    margin-top: 20px;
+    margin-top: 10px;
     text-align: left;
 }
+
 #missionBoard h3 {
-    font-size: 20pt;
+    font-size: clamp(1rem, 3vw, 1.2rem);
 }
+
 #missionBoard ul {
     list-style: disc;
-    padding-left: 20px;
+    padding-left: 15px;
 }
+
 .modal {
     display: none;
     position: fixed;
@@ -141,60 +160,92 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #00000080;
+    background: rgba(0,0,0,0.7); /* Simplified background */
     z-index: 1000;
 }
+
 .modal-content {
-    background: #000000a2;
-    backdrop-filter: blur(10px);
+    background: rgba(0,0,0,0.8); /* No blur for performance */
     color: white;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #ffffff3d;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 400px;
+    margin: 20% auto; /* Adjusted margin for mobile */
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    width: 85%;
+    max-width: 350px; /* Smaller modal for mobile */
     text-align: center;
 }
+
 .close {
     color: white;
     float: right;
-    font-size: 28px;
+    font-size: 24px;
     cursor: pointer;
 }
+
 .close:hover {
-    color: #ffffff80;
+    color: rgba(255,255,255,0.7);
 }
+
 .modal-content h2 {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    font-size: clamp(1.2rem, 3.5vw, 1.4rem);
 }
+
 .modal-content form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
+
 .modal-content input, .modal-content select {
-    padding: 10px;
-    border: 1px solid #ffffff3d;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
     border-radius: 5px;
-    background: #ffffff1c;
+    background: rgba(255,255,255,0.1);
     color: white;
 }
+
 .modal-content button {
-    background: linear-gradient(#d199ff, #b266ff);
+    background: #b266ff;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     cursor: pointer;
 }
+
 .modal-content button:hover {
-    transform: scale(1.05);
+    background: #9b55cc;
 }
+
 .a {
     position: fixed;
     bottom: 10px;
     right: 10px;
     color: white;
     text-decoration: none;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+    .game-card {
+        padding: 10px;
+        width: 95%;
+    }
+    .navbar {
+        padding: 6px 12px;
+    }
+    .joinbtn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    .btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    canvas {
+        max-width: 100%;
+    }
 }
