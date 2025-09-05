@@ -35,7 +35,6 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
-
 // Modals
 const customizeModal = document.getElementById('customizeModal');
 const closes = document.getElementsByClassName('close');
@@ -49,7 +48,6 @@ window.onclick = function(event) {
     event.target.style.display = 'none';
   }
 }
-
 // Car Game
 const carCanvas = document.getElementById('carCanvas');
 const carCtx = carCanvas.getContext('2d');
@@ -61,7 +59,6 @@ let carLevel = 1;
 let carStars = 1;
 let carEvaded = 0;
 let carAnimationFrame;
-
 function spawnPolice(num) {
   for (let i = 0; i < num; i++) {
     const side = Math.floor(Math.random() * 4);
@@ -73,10 +70,35 @@ function spawnPolice(num) {
     policeCars.push({ x, y, width: 20, height: 40, speed: 2 + carLevel * 0.5, color: '#0000ff' });
   }
 }
-
+function drawCar(ctx, x, y, color) {
+  const width = 20;
+  const height = 40;
+  ctx.fillStyle = color;
+  // Body
+  ctx.fillRect(x + 2, y + 10, width - 4, height - 20);
+  // Top
+  ctx.fillRect(x + 4, y, width - 8, 15);
+  // Cabin
+  ctx.fillStyle = '#add8e6';
+  ctx.fillRect(x + 5, y + 5, width - 10, 10);
+  // Wheels
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(x + 5, y + height - 5, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + width - 5, y + height - 5, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + 5, y + 10, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + width - 5, y + 10, 5, 0, Math.PI * 2);
+  ctx.fill();
+}
 function updateCarGame() {
   carCtx.clearRect(0, 0, 800, 600);
-  
+ 
   // Draw map (simple roads)
   carCtx.fillStyle = '#808080';
   carCtx.fillRect(0, 0, 800, 600); // Ground
@@ -89,6 +111,15 @@ function updateCarGame() {
   carCtx.fillRect(0, 300, 800, 20);
   carCtx.fillRect(0, 500, 800, 20);
 
+  // Timer and levels (drawn inside canvas)
+  const elapsed = (Date.now() - carStartTime) / 1000;
+  const minutes = Math.floor(elapsed / 60);
+  const seconds = Math.floor(elapsed % 60);
+  carCtx.font = '20px Arial';
+  carCtx.fillStyle = '#ffffff';
+  carCtx.fillText(`Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`, 10, 30);
+  carCtx.fillText('Wanted Level: ' + '★'.repeat(carStars), 10, 60);
+
   // Player car
   carPlayer.x += carPlayer.vx * carPlayer.boost;
   carPlayer.y += carPlayer.vy * carPlayer.boost;
@@ -96,8 +127,7 @@ function updateCarGame() {
   if (carPlayer.x > 780) carPlayer.x = 780;
   if (carPlayer.y < 0) carPlayer.y = 0;
   if (carPlayer.y > 560) carPlayer.y = 560;
-  carCtx.fillStyle = carPlayer.color;
-  carCtx.fillRect(carPlayer.x, carPlayer.y, carPlayer.width, carPlayer.height);
+  drawCar(carCtx, carPlayer.x, carPlayer.y, carPlayer.color);
 
   // Police cars
   policeCars.forEach((p, i) => {
@@ -108,23 +138,13 @@ function updateCarGame() {
       p.x += (dx / dist) * p.speed;
       p.y += (dy / dist) * p.speed;
     }
-    carCtx.fillStyle = p.color;
-    carCtx.fillRect(p.x, p.y, p.width, p.height);
-
+    drawCar(carCtx, p.x, p.y, p.color);
     // Collision
     if (Math.abs(p.x - carPlayer.x) < 20 && Math.abs(p.y - carPlayer.y) < 40) {
       alert('Caught by police! Game Over. Survived: ' + Math.floor((Date.now() - carStartTime) / 1000) + ' seconds');
       stopCarGame();
     }
   });
-
-  // Timer and levels
-  const elapsed = (Date.now() - carStartTime) / 1000;
-  const minutes = Math.floor(elapsed / 60);
-  const seconds = Math.floor(elapsed % 60);
-  document.getElementById('carTimer').textContent = `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  document.getElementById('carStars').textContent = 'Wanted Level: ' + '★'.repeat(carStars);
-
   if (elapsed > 300 * carLevel) { // 5 minutes per level
     carLevel++;
     carStars = Math.min(carStars + 1, 5);
@@ -133,10 +153,8 @@ function updateCarGame() {
   } else if (Math.random() < 0.01) { // Random spawn
     spawnPolice(1);
   }
-
   if (carGameRunning) carAnimationFrame = requestAnimationFrame(updateCarGame);
 }
-
 function startCarGame() {
   if (carGameRunning) return;
   carGameRunning = true;
@@ -147,14 +165,11 @@ function startCarGame() {
   spawnPolice(5); // Start with 5 police
   updateCarGame();
 }
-
 function stopCarGame() {
   carGameRunning = false;
   cancelAnimationFrame(carAnimationFrame);
 }
-
 document.getElementById('startCarGame').onclick = startCarGame;
-
 document.addEventListener('keydown', (e) => {
   if (!carGameRunning) return;
   if (e.key === 'ArrowLeft') carPlayer.vx = -carPlayer.speed;
@@ -162,160 +177,124 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowUp') carPlayer.vy = -carPlayer.speed;
   if (e.key === 'ArrowDown') carPlayer.vy = carPlayer.speed;
 });
-
 document.addEventListener('keyup', (e) => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') carPlayer.vx = 0;
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') carPlayer.vy = 0;
 });
+// On-screen arrows
+const controlContainer = document.createElement('div');
+controlContainer.style.position = 'fixed';
+controlContainer.style.bottom = '20px';
+controlContainer.style.left = '50%';
+controlContainer.style.transform = 'translateX(-50%)';
+controlContainer.style.zIndex = '1000';
+document.body.appendChild(controlContainer);
 
-// Customization
+const upButton = document.createElement('button');
+upButton.textContent = '↑';
+upButton.style.fontSize = '40px';
+upButton.style.margin = '5px';
+upButton.style.background = '#fff';
+upButton.style.border = '1px solid #000';
+upButton.style.cursor = 'pointer';
+controlContainer.appendChild(upButton);
+
+const horizontalControls = document.createElement('div');
+horizontalControls.style.display = 'flex';
+horizontalControls.style.justifyContent = 'center';
+controlContainer.appendChild(horizontalControls);
+
+const leftButton = document.createElement('button');
+leftButton.textContent = '←';
+leftButton.style.fontSize = '40px';
+leftButton.style.margin = '5px';
+leftButton.style.background = '#fff';
+leftButton.style.border = '1px solid #000';
+leftButton.style.cursor = 'pointer';
+horizontalControls.appendChild(leftButton);
+
+const downButton = document.createElement('button');
+downButton.textContent = '↓';
+downButton.style.fontSize = '40px';
+downButton.style.margin = '5px';
+downButton.style.background = '#fff';
+downButton.style.border = '1px solid #000';
+downButton.style.cursor = 'pointer';
+horizontalControls.appendChild(downButton);
+
+const rightButton = document.createElement('button');
+rightButton.textContent = '→';
+rightButton.style.fontSize = '40px';
+rightButton.style.margin = '5px';
+rightButton.style.background = '#fff';
+rightButton.style.border = '1px solid #000';
+rightButton.style.cursor = 'pointer';
+horizontalControls.appendChild(rightButton);
+
+function startMove(dir) {
+  if (!carGameRunning) return;
+  switch (dir) {
+    case 'left': carPlayer.vx = -carPlayer.speed; break;
+    case 'right': carPlayer.vx = carPlayer.speed; break;
+    case 'up': carPlayer.vy = -carPlayer.speed; break;
+    case 'down': carPlayer.vy = carPlayer.speed; break;
+  }
+}
+function stopMove(dir) {
+  if (!carGameRunning) return;
+  switch (dir) {
+    case 'left':
+    case 'right': carPlayer.vx = 0; break;
+    case 'up':
+    case 'down': carPlayer.vy = 0; break;
+  }
+}
+
+// Mouse events
+upButton.addEventListener('mousedown', () => startMove('up'));
+upButton.addEventListener('mouseup', () => stopMove('up'));
+leftButton.addEventListener('mousedown', () => startMove('left'));
+leftButton.addEventListener('mouseup', () => stopMove('left'));
+downButton.addEventListener('mousedown', () => startMove('down'));
+downButton.addEventListener('mouseup', () => stopMove('down'));
+rightButton.addEventListener('mousedown', () => startMove('right'));
+rightButton.addEventListener('mouseup', () => stopMove('right'));
+
+// Touch events
+upButton.addEventListener('touchstart', () => startMove('up'));
+upButton.addEventListener('touchend', () => stopMove('up'));
+leftButton.addEventListener('touchstart', () => startMove('left'));
+leftButton.addEventListener('touchend', () => stopMove('left'));
+downButton.addEventListener('touchstart', () => startMove('down'));
+downButton.addEventListener('touchend', () => stopMove('down'));
+rightButton.addEventListener('touchstart', () => startMove('right'));
+rightButton.addEventListener('touchend', () => stopMove('right'));
+
+// Fullscreen option
+const fullscreenButton = document.createElement('button');
+fullscreenButton.textContent = 'Fullscreen';
+fullscreenButton.style.position = 'fixed';
+fullscreenButton.style.top = '20px';
+fullscreenButton.style.right = '20px';
+fullscreenButton.style.fontSize = '20px';
+fullscreenButton.style.zIndex = '1000';
+fullscreenButton.style.cursor = 'pointer';
+document.body.appendChild(fullscreenButton);
+fullscreenButton.onclick = () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.error(`Error attempting to enable fullscreen: ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+};
+
+// Customization (kept as modal, assumed to be overlaid inside the game view)
 document.getElementById('customizeCar').onclick = () => customizeModal.style.display = 'block';
-
 document.getElementById('customizeForm').onsubmit = (e) => {
   e.preventDefault();
   carPlayer.color = document.getElementById('carColor').value;
   carPlayer.boost = parseFloat(document.getElementById('speedBoost').value);
   customizeModal.style.display = 'none';
 };
-
-// Football Game
-const footballCanvas = document.getElementById('footballCanvas');
-const footballCtx = footballCanvas.getContext('2d');
-let footballGameRunning = false;
-let player = { x: 100, y: 200, size: 10, speed: 4, vx: 0, vy: 0 };
-let opponent = { x: 700, y: 200, size: 10, speed: 3 };
-let ball = { x: 400, y: 200, size: 5, vx: 0, vy: 0 };
-let playerScore = 0;
-let opponentScore = 0;
-let footballStartTime = 0;
-let footballAnimationFrame;
-
-function updateFootballGame() {
-  footballCtx.clearRect(0, 0, 800, 400);
-  
-  // Draw field
-  footballCtx.fillStyle = '#00ff00';
-  footballCtx.fillRect(0, 0, 800, 400);
-  footballCtx.strokeStyle = '#ffffff';
-  footballCtx.lineWidth = 2;
-  footballCtx.strokeRect(0, 0, 800, 400);
-  footballCtx.beginPath();
-  footballCtx.arc(400, 200, 50, 0, Math.PI * 2);
-  footballCtx.stroke();
-  footballCtx.fillStyle = '#ffffff';
-  footballCtx.fillRect(0, 150, 20, 100); // Left goal
-  footballCtx.fillRect(780, 150, 20, 100); // Right goal
-
-  // Player
-  player.x += player.vx;
-  player.y += player.vy;
-  if (player.x < 0) player.x = 0;
-  if (player.x > 790) player.x = 790;
-  if (player.y < 0) player.y = 0;
-  if (player.y > 390) player.y = 390;
-  footballCtx.fillStyle = '#ff0000';
-  footballCtx.beginPath();
-  footballCtx.arc(player.x, player.y, player.size, 0, Math.PI * 2);
-  footballCtx.fill();
-
-  // Opponent AI
-  const ballDx = ball.x - opponent.x;
-  const ballDy = ball.y - opponent.y;
-  const ballDist = Math.sqrt(ballDx * ballDx + ballDy * ballDy);
-  if (ballDist > 0) {
-    opponent.x += (ballDx / ballDist) * opponent.speed;
-    opponent.y += (ballDy / ballDist) * opponent.speed;
-  }
-  footballCtx.fillStyle = '#0000ff';
-  footballCtx.beginPath();
-  footballCtx.arc(opponent.x, opponent.y, opponent.size, 0, Math.PI * 2);
-  footballCtx.fill();
-
-  // Ball
-  ball.x += ball.vx;
-  ball.y += ball.vy;
-  ball.vx *= 0.98; // Friction
-  ball.vy *= 0.98;
-  if (ball.y < 0 || ball.y > 395) ball.vy *= -1;
-  if (ball.x < 0 || ball.x > 795) ball.vx *= -1;
-  footballCtx.fillStyle = '#ffffff';
-  footballCtx.beginPath();
-  footballCtx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
-  footballCtx.fill();
-
-  // Kick
-  const playerBallDist = Math.hypot(player.x - ball.x, player.y - ball.y);
-  if (playerBallDist < 15 && kicking) {
-    ball.vx = (ball.x - player.x) / 5 + player.vx;
-    ball.vy = (ball.y - player.y) / 5 + player.vy;
-  }
-  const oppBallDist = Math.hypot(opponent.x - ball.x, opponent.y - ball.y);
-  if (oppBallDist < 15) {
-    ball.vx = (ball.x - opponent.x) / 5 - 2; // AI kicks towards left
-    ball.vy = (ball.y - opponent.y) / 5;
-  }
-
-  // Goals
-  if (ball.x < 20 && ball.y > 150 && ball.y < 250) {
-    opponentScore++;
-    resetFootball();
-  }
-  if (ball.x > 780 && ball.y > 150 && ball.y < 250) {
-    playerScore++;
-    resetFootball();
-  }
-
-  document.getElementById('footballScore').textContent = `Score: ${playerScore} - ${opponentScore}`;
-
-  // Timer
-  const elapsed = (Date.now() - footballStartTime) / 1000;
-  const minutes = Math.floor(elapsed / 60);
-  const seconds = Math.floor(elapsed % 60);
-  document.getElementById('footballTimer').textContent = `Time: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-  if (footballGameRunning) footballAnimationFrame = requestAnimationFrame(updateFootballGame);
-}
-
-function resetFootball() {
-  ball.x = 400;
-  ball.y = 200;
-  ball.vx = 0;
-  ball.vy = 0;
-  player.x = 100;
-  player.y = 200;
-  opponent.x = 700;
-  opponent.y = 200;
-}
-
-function startFootballGame() {
-  if (footballGameRunning) return;
-  footballGameRunning = true;
-  playerScore = 0;
-  opponentScore = 0;
-  footballStartTime = Date.now();
-  resetFootball();
-  updateFootballGame();
-}
-
-function stopFootballGame() {
-  footballGameRunning = false;
-  cancelAnimationFrame(footballAnimationFrame);
-}
-
-document.getElementById('startFootballGame').onclick = startFootballGame;
-
-let kicking = false;
-document.addEventListener('keydown', (e) => {
-  if (!footballGameRunning) return;
-  if (e.key === 'ArrowLeft') player.vx = -player.speed;
-  if (e.key === 'ArrowRight') player.vx = player.speed;
-  if (e.key === 'ArrowUp') player.vy = -player.speed;
-  if (e.key === 'ArrowDown') player.vy = player.speed;
-  if (e.key === ' ') kicking = true;
-});
-
-document.addEventListener('keyup', (e) => {
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') player.vx = 0;
-  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') player.vy = 0;
-  if (e.key === ' ') kicking = false;
-});
