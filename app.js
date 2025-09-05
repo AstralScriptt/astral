@@ -1,5 +1,5 @@
 const colors = ["#d199ff", "#b266ff", "#e2b0ff", "#cc8cff", "#ff69b4", "#00ff00", "#ffff00"];
-const ballCount = 30; // More balls for awesomeness
+const ballCount = 2; // More balls for awesomeness
 const container = document.getElementById("bg");
 const worldHeight = document.documentElement.scrollHeight;
 const worldWidth = window.innerWidth;
@@ -405,3 +405,4 @@ document.getElementById('customizeForm').onsubmit = (e) => {
   carPlayer.boost = parseFloat(document.getElementById('speedBoost').value);
   customizeModal.style.display = 'none';
 };
+
