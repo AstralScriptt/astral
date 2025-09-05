@@ -52,7 +52,7 @@ window.onclick = function(event) {
 const carCanvas = document.getElementById('carCanvas');
 const carCtx = carCanvas.getContext('2d');
 let carGameRunning = false;
-let carPlayer = { x: 400, y: 300, width: 20, height: 40, speed: 3, vx: 0, vy: 0, color: '#ff0000', boost: 1 };
+let carPlayer = { x: 400, y: 300, width: 30, height: 60, speed: 3, vx: 0, vy: 0, color: '#ff0000', boost: 1 };
 let policeCars = [];
 let carStartTime = 0;
 let carLevel = 1;
@@ -67,49 +67,152 @@ function spawnPolice(num) {
     else if (side === 1) { x = Math.random() * 800; y = 620; }
     else if (side === 2) { x = -20; y = Math.random() * 600; }
     else { x = 820; y = Math.random() * 600; }
-    policeCars.push({ x, y, width: 20, height: 40, speed: 2 + carLevel * 0.5, color: '#0000ff' });
+    policeCars.push({ x, y, width: 30, height: 60, speed: 2 + carLevel * 0.5, color: '#0000ff' });
   }
 }
-function drawCar(ctx, x, y, color) {
-  const width = 20;
-  const height = 40;
-  ctx.fillStyle = color;
-  // Body
-  ctx.fillRect(x + 2, y + 10, width - 4, height - 20);
-  // Top
-  ctx.fillRect(x + 4, y, width - 8, 15);
-  // Cabin
+function drawHyperRealisticCar(ctx, x, y, color, isPolice = false) {
+  const width = 30;
+  const height = 60;
+
+  // Body with gradient
+  const bodyGradient = ctx.createLinearGradient(x, y, x, y + height);
+  bodyGradient.addColorStop(0, color);
+  bodyGradient.addColorStop(1, '#000000');
+  ctx.fillStyle = bodyGradient;
+  ctx.beginPath();
+  ctx.moveTo(x + 5, y);
+  ctx.lineTo(x + width - 5, y);
+  ctx.quadraticCurveTo(x + width, y + 10, x + width, y + 20);
+  ctx.lineTo(x + width, y + height - 20);
+  ctx.quadraticCurveTo(x + width, y + height - 10, x + width - 5, y + height);
+  ctx.lineTo(x + 5, y + height);
+  ctx.quadraticCurveTo(x, y + height - 10, x, y + height - 20);
+  ctx.lineTo(x, y + 20);
+  ctx.quadraticCurveTo(x, y + 10, x + 5, y);
+  ctx.fill();
+
+  // Windows
   ctx.fillStyle = '#add8e6';
-  ctx.fillRect(x + 5, y + 5, width - 10, 10);
-  // Wheels
-  ctx.fillStyle = '#000';
+  ctx.fillRect(x + 5, y + 10, width - 10, 15); // Front window
+  ctx.fillRect(x + 5, y + 30, width - 10, 15); // Side windows
+
+  // Headlights
+  ctx.fillStyle = '#ffff00';
   ctx.beginPath();
-  ctx.arc(x + 5, y + height - 5, 5, 0, Math.PI * 2);
+  ctx.ellipse(x + 5, y + 5, 3, 2, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(x + width - 5, y + height - 5, 5, 0, Math.PI * 2);
+  ctx.ellipse(x + width - 5, y + 5, 3, 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Taillights
+  ctx.fillStyle = '#ff0000';
+  ctx.beginPath();
+  ctx.ellipse(x + 5, y + height - 5, 3, 2, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(x + 5, y + 10, 5, 0, Math.PI * 2);
+  ctx.ellipse(x + width - 5, y + height - 5, 3, 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Wheels with details
+  ctx.fillStyle = '#333333';
+  ctx.beginPath();
+  ctx.arc(x + 7, y + height - 10, 8, 0, Math.PI * 2);
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(x + width - 5, y + 10, 5, 0, Math.PI * 2);
+  ctx.arc(x + width - 7, y + height - 10, 8, 0, Math.PI * 2);
   ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + 7, y + 10, 8, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + width - 7, y + 10, 8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Hubcaps
+  ctx.fillStyle = '#cccccc';
+  ctx.beginPath();
+  ctx.arc(x + 7, y + height - 10, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + width - 7, y + height - 10, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + 7, y + 10, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(x + width - 7, y + 10, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (isPolice) {
+    // Police lights
+    ctx.fillStyle = '#ff0000';
+    ctx.fillRect(x + 10, y - 5, 5, 5);
+    ctx.fillStyle = '#0000ff';
+    ctx.fillRect(x + width - 15, y - 5, 5, 5);
+  }
+}
+function drawRealisticMap(ctx) {
+  // Grass background
+  ctx.fillStyle = '#228b22';
+  ctx.fillRect(0, 0, 800, 600);
+
+  // Roads with asphalt color
+  ctx.fillStyle = '#696969';
+  // Vertical roads
+  ctx.fillRect(80, 0, 60, 600);
+  ctx.fillRect(280, 0, 60, 600);
+  ctx.fillRect(480, 0, 60, 600);
+  ctx.fillRect(680, 0, 60, 600);
+  // Horizontal roads
+  ctx.fillRect(0, 80, 800, 60);
+  ctx.fillRect(0, 280, 800, 60);
+  ctx.fillRect(0, 480, 800, 60);
+
+  // Road lines - dashed white lines
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([10, 10]);
+
+  // Vertical lines
+  ctx.beginPath();
+  ctx.moveTo(110, 0);
+  ctx.lineTo(110, 600);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(310, 0);
+  ctx.lineTo(310, 600);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(510, 0);
+  ctx.lineTo(510, 600);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(710, 0);
+  ctx.lineTo(710, 600);
+  ctx.stroke();
+
+  // Horizontal lines
+  ctx.beginPath();
+  ctx.moveTo(0, 110);
+  ctx.lineTo(800, 110);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(0, 310);
+  ctx.lineTo(800, 310);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(0, 510);
+  ctx.lineTo(800, 510);
+  ctx.stroke();
+
+  ctx.setLineDash([]); // Reset dash
 }
 function updateCarGame() {
   carCtx.clearRect(0, 0, 800, 600);
  
-  // Draw map (simple roads)
-  carCtx.fillStyle = '#808080';
-  carCtx.fillRect(0, 0, 800, 600); // Ground
-  carCtx.fillStyle = '#000000';
-  carCtx.fillRect(100, 0, 20, 600); // Vertical roads
-  carCtx.fillRect(300, 0, 20, 600);
-  carCtx.fillRect(500, 0, 20, 600);
-  carCtx.fillRect(700, 0, 20, 600);
-  carCtx.fillRect(0, 100, 800, 20); // Horizontal roads
-  carCtx.fillRect(0, 300, 800, 20);
-  carCtx.fillRect(0, 500, 800, 20);
+  // Draw realistic map
+  drawRealisticMap(carCtx);
 
   // Timer and levels (drawn inside canvas)
   const elapsed = (Date.now() - carStartTime) / 1000;
@@ -124,10 +227,10 @@ function updateCarGame() {
   carPlayer.x += carPlayer.vx * carPlayer.boost;
   carPlayer.y += carPlayer.vy * carPlayer.boost;
   if (carPlayer.x < 0) carPlayer.x = 0;
-  if (carPlayer.x > 780) carPlayer.x = 780;
+  if (carPlayer.x > 770) carPlayer.x = 770;
   if (carPlayer.y < 0) carPlayer.y = 0;
-  if (carPlayer.y > 560) carPlayer.y = 560;
-  drawCar(carCtx, carPlayer.x, carPlayer.y, carPlayer.color);
+  if (carPlayer.y > 540) carPlayer.y = 540;
+  drawHyperRealisticCar(carCtx, carPlayer.x, carPlayer.y, carPlayer.color);
 
   // Police cars
   policeCars.forEach((p, i) => {
@@ -138,9 +241,9 @@ function updateCarGame() {
       p.x += (dx / dist) * p.speed;
       p.y += (dy / dist) * p.speed;
     }
-    drawCar(carCtx, p.x, p.y, p.color);
+    drawHyperRealisticCar(carCtx, p.x, p.y, p.color, true);
     // Collision
-    if (Math.abs(p.x - carPlayer.x) < 20 && Math.abs(p.y - carPlayer.y) < 40) {
+    if (Math.abs(p.x - carPlayer.x) < 30 && Math.abs(p.y - carPlayer.y) < 60) {
       alert('Caught by police! Game Over. Survived: ' + Math.floor((Date.now() - carStartTime) / 1000) + ' seconds');
       stopCarGame();
     }
@@ -155,39 +258,62 @@ function updateCarGame() {
   }
   if (carGameRunning) carAnimationFrame = requestAnimationFrame(updateCarGame);
 }
+const loadingScreen = document.createElement('div');
+loadingScreen.style.position = 'fixed';
+loadingScreen.style.top = '0';
+loadingScreen.style.left = '0';
+loadingScreen.style.width = '100%';
+loadingScreen.style.height = '100%';
+loadingScreen.style.background = '#000';
+loadingScreen.style.color = '#fff';
+loadingScreen.style.display = 'flex';
+loadingScreen.style.alignItems = 'center';
+loadingScreen.style.justifyContent = 'center';
+loadingScreen.style.fontSize = '24px';
+loadingScreen.style.zIndex = '1001';
+loadingScreen.style.textAlign = 'center';
+loadingScreen.innerHTML = 'Brailyn idk if i spelt your name wrong but this the beta version of the game itle be more realistic soon i tried my best ngl<br><br>Loading...';
+document.body.appendChild(loadingScreen);
+
 function startCarGame() {
   if (carGameRunning) return;
-  carGameRunning = true;
-  policeCars = [];
-  carStartTime = Date.now();
-  carLevel = 1;
-  carStars = 1;
-  spawnPolice(5); // Start with 5 police
-  updateCarGame();
+  loadingScreen.style.display = 'flex';
+  setTimeout(() => {
+    loadingScreen.style.display = 'none';
+    carGameRunning = true;
+    policeCars = [];
+    carStartTime = Date.now();
+    carLevel = 1;
+    carStars = 1;
+    spawnPolice(5); // Start with 5 police
+    controlContainer.style.display = 'block';
+    updateCarGame();
+  }, 3000); // 3 seconds loading
 }
 function stopCarGame() {
   carGameRunning = false;
   cancelAnimationFrame(carAnimationFrame);
+  controlContainer.style.display = 'none';
 }
 document.getElementById('startCarGame').onclick = startCarGame;
 document.addEventListener('keydown', (e) => {
   if (!carGameRunning) return;
-  if (e.key === 'ArrowLeft') carPlayer.vx = -carPlayer.speed;
-  if (e.key === 'ArrowRight') carPlayer.vx = carPlayer.speed;
-  if (e.key === 'ArrowUp') carPlayer.vy = -carPlayer.speed;
-  if (e.key === 'ArrowDown') carPlayer.vy = carPlayer.speed;
+  if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') carPlayer.vx = -carPlayer.speed;
+  if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') carPlayer.vx = carPlayer.speed;
+  if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') carPlayer.vy = -carPlayer.speed;
+  if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') carPlayer.vy = carPlayer.speed;
 });
 document.addEventListener('keyup', (e) => {
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') carPlayer.vx = 0;
-  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') carPlayer.vy = 0;
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key.toLowerCase() === 'a' || e.key.toLowerCase() === 'd') carPlayer.vx = 0;
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key.toLowerCase() === 'w' || e.key.toLowerCase() === 's') carPlayer.vy = 0;
 });
-// On-screen arrows
+// On-screen arrows laid out like WASD
 const controlContainer = document.createElement('div');
 controlContainer.style.position = 'fixed';
 controlContainer.style.bottom = '20px';
-controlContainer.style.left = '50%';
-controlContainer.style.transform = 'translateX(-50%)';
+controlContainer.style.left = '20px';
 controlContainer.style.zIndex = '1000';
+controlContainer.style.display = 'none';
 document.body.appendChild(controlContainer);
 
 const upButton = document.createElement('button');
@@ -197,12 +323,13 @@ upButton.style.margin = '5px';
 upButton.style.background = '#fff';
 upButton.style.border = '1px solid #000';
 upButton.style.cursor = 'pointer';
+upButton.style.display = 'block';
+upButton.style.marginLeft = '50px'; // Center the up button
 controlContainer.appendChild(upButton);
 
-const horizontalControls = document.createElement('div');
-horizontalControls.style.display = 'flex';
-horizontalControls.style.justifyContent = 'center';
-controlContainer.appendChild(horizontalControls);
+const bottomRow = document.createElement('div');
+bottomRow.style.display = 'flex';
+controlContainer.appendChild(bottomRow);
 
 const leftButton = document.createElement('button');
 leftButton.textContent = '←';
@@ -211,7 +338,7 @@ leftButton.style.margin = '5px';
 leftButton.style.background = '#fff';
 leftButton.style.border = '1px solid #000';
 leftButton.style.cursor = 'pointer';
-horizontalControls.appendChild(leftButton);
+bottomRow.appendChild(leftButton);
 
 const downButton = document.createElement('button');
 downButton.textContent = '↓';
@@ -220,7 +347,7 @@ downButton.style.margin = '5px';
 downButton.style.background = '#fff';
 downButton.style.border = '1px solid #000';
 downButton.style.cursor = 'pointer';
-horizontalControls.appendChild(downButton);
+bottomRow.appendChild(downButton);
 
 const rightButton = document.createElement('button');
 rightButton.textContent = '→';
@@ -229,7 +356,7 @@ rightButton.style.margin = '5px';
 rightButton.style.background = '#fff';
 rightButton.style.border = '1px solid #000';
 rightButton.style.cursor = 'pointer';
-horizontalControls.appendChild(rightButton);
+bottomRow.appendChild(rightButton);
 
 function startMove(dir) {
   if (!carGameRunning) return;
@@ -270,19 +397,20 @@ downButton.addEventListener('touchend', () => stopMove('down'));
 rightButton.addEventListener('touchstart', () => startMove('right'));
 rightButton.addEventListener('touchend', () => stopMove('right'));
 
-// Fullscreen option
+// Fullscreen button on the game
 const fullscreenButton = document.createElement('button');
 fullscreenButton.textContent = 'Fullscreen';
-fullscreenButton.style.position = 'fixed';
-fullscreenButton.style.top = '20px';
-fullscreenButton.style.right = '20px';
+fullscreenButton.style.position = 'absolute';
+fullscreenButton.style.top = '10px';
+fullscreenButton.style.right = '10px';
 fullscreenButton.style.fontSize = '20px';
 fullscreenButton.style.zIndex = '1000';
 fullscreenButton.style.cursor = 'pointer';
-document.body.appendChild(fullscreenButton);
+carCanvas.parentElement.style.position = 'relative'; // Assuming canvas has a parent
+carCanvas.parentElement.appendChild(fullscreenButton);
 fullscreenButton.onclick = () => {
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(err => {
+    carCanvas.requestFullscreen().catch(err => {
       console.error(`Error attempting to enable fullscreen: ${err.message}`);
     });
   } else {
