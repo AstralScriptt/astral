@@ -4,7 +4,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 body {
-    background: black;
+    background: linear-gradient(to bottom, #000000, #4b0082); /* Awesome gradient */
     overflow-x: hidden;
 }
 .bg-container {
@@ -17,7 +17,12 @@ body {
 .ball {
     position: absolute;
     border-radius: 50%;
-    opacity: .5;
+    opacity: .6;
+    animation: glow 2s infinite alternate;
+}
+@keyframes glow {
+    from { box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+    to { box-shadow: 0 0 30px rgba(255,255,255,1); }
 }
 .navbar {
     display: flex;
@@ -26,22 +31,10 @@ body {
     background: #000000a2;
     backdrop-filter: blur(10px);
     padding: 10px 20px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
 .banner {
     color: white;
-}
-.auth-buttons .btn {
-    background: #000000a2;
-    backdrop-filter: blur(10px);
-    color: white;
-    border: 1px solid #ffffff3d;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-}
-.auth-buttons .btn:hover {
-    background: #ffffff1c;
 }
 .hidden {
     display: none;
@@ -50,67 +43,96 @@ body {
     text-align: center;
     margin-top: 100px;
     color: white;
+    text-shadow: 0 0 10px #ffffff;
 }
 .title {
-    font-size: 40pt;
+    font-size: 50pt;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 .desc {
-    font-size: 20pt;
+    font-size: 25pt;
+    color: #ffff00;
 }
 .joinbtn {
-    background: #000000a2;
-    backdrop-filter: blur(10px);
+    background: linear-gradient(#ff69b4, #b266ff);
     color: white;
-    border: 1px solid #ffffff3d;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
     text-decoration: none;
+    box-shadow: 0 0 15px #ff69b4;
 }
 .joinbtn:hover {
-    background: #ffffff1c;
+    transform: scale(1.1);
 }
-.features {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-}
-.cards {
-    display: flex;
-    gap: 20px;
-}
-.card1, .card2, .card3 {
-    background: #000000a2;
-    backdrop-filter: blur(10px);
-    color: white;
-    padding: 20px;
-    border: 1px solid #ffffff3d;
-    border-radius: 10px;
-    width: 200px;
-    text-align: center;
-}
-.card1:hover, .card2:hover, .card3:hover {
-    background: #ffffff1c;
-}
-.side-tabs {
-    position: fixed;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+.games {
+    margin: 50px auto;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    gap: 50px;
 }
-.tab-btn {
-    background: #000000a2;
+.game-card {
+    background: #ffffff1c;
     backdrop-filter: blur(10px);
     color: white;
+    padding: 30px;
     border: 1px solid #ffffff3d;
-    padding: 10px 20px;
-    border-radius: 5px 0 0 5px;
-    cursor: pointer;
+    border-radius: 20px;
+    width: 850px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(255,255,255,0.3);
 }
-.tab-btn:hover {
-    background: #ffffff1c;
+.game-card h2 {
+    font-size: 30pt;
+    margin-bottom: 10px;
+}
+.game-card p {
+    font-size: 16pt;
+    margin-bottom: 20px;
+}
+canvas {
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    background: #000000;
+}
+.game-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.btn {
+    background: linear-gradient(#d199ff, #b266ff);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #d199ff;
+}
+.btn:hover {
+    transform: scale(1.05);
+}
+#carStatus, #footballScore {
+    margin-top: 10px;
+    font-size: 18pt;
+}
+#missionBoard {
+    margin-top: 20px;
+    text-align: left;
+}
+#missionBoard h3 {
+    font-size: 20pt;
+}
+#missionBoard ul {
+    list-style: disc;
+    padding-left: 20px;
 }
 .modal {
     display: none;
@@ -131,7 +153,7 @@ body {
     border: 1px solid #ffffff3d;
     border-radius: 10px;
     width: 80%;
-    max-width: 500px;
+    max-width: 400px;
     text-align: center;
 }
 .close {
@@ -151,7 +173,7 @@ body {
     flex-direction: column;
     gap: 10px;
 }
-.modal-content input, .modal-content select, .modal-content textarea {
+.modal-content input, .modal-content select {
     padding: 10px;
     border: 1px solid #ffffff3d;
     border-radius: 5px;
@@ -159,45 +181,15 @@ body {
     color: white;
 }
 .modal-content button {
-    background: #000000a2;
-    backdrop-filter: blur(10px);
+    background: linear-gradient(#d199ff, #b266ff);
     color: white;
-    border: 1px solid #ffffff3d;
+    border: none;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
 }
 .modal-content button:hover {
-    background: #ffffff1c;
-}
-.status-circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 10px;
-}
-#statusDisplay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-#editStatus {
-    display: flex;
-    gap: 10px;
-}
-#changelogsList {
-    list-style: none;
-    text-align: left;
-    margin-bottom: 20px;
-}
-#changelogsList li {
-    padding: 5px 0;
-}
-#editChangelogs textarea {
-    width: 100%;
-    height: 100px;
+    transform: scale(1.05);
 }
 .a {
     position: fixed;
@@ -205,15 +197,4 @@ body {
     right: 10px;
     color: white;
     text-decoration: none;
-}
-#configForm label {
-    font-size: 16pt;
-    margin-top: 10px;
-}
-#configForm input[type="checkbox"] {
-    margin-right: 5px;
-}
-#configForm input[type="text"],
-#configForm input[type="number"] {
-    margin-bottom: 10px;
 }
