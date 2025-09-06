@@ -1,251 +1,200 @@
 * {
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* System fonts for faster loading */
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 body {
-    background: #000000; /* Simplified to solid color for performance */
-    overflow-x: hidden;
+    background: linear-gradient(to bottom, #000000, #4b0082); /* Awesome gradient */
+    overflow-x: hidden;
 }
-
 .bg-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
 }
-
 .ball {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.6;
-    /* Removed glow animation to reduce CPU usage */
-    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    position: absolute;
+    border-radius: 50%;
+    opacity: .6;
+    animation: glow 2s infinite alternate;
 }
-
+@keyframes glow {
+    from { box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+    to { box-shadow: 0 0 30px rgba(255,255,255,1); }
+}
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(0,0,0,0.8); /* Simplified background, removed blur */
-    padding: 8px 16px; /* Reduced padding */
-    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Simplified shadow */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #000000a2;
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
-
 .banner {
-    color: white;
-    font-size: 1.2rem; /* Responsive font size */
+    color: white;
 }
-
 .hidden {
-    display: none;
+    display: none;
 }
-
 #headertext {
-    text-align: center;
-    margin-top: 50px; /* Reduced margin for smaller screens */
-    color: white;
-    text-shadow: 0 0 5px rgba(255,255,255,0.5); /* Simplified shadow */
+    text-align: center;
+    margin-top: 100px;
+    color: white;
+    text-shadow: 0 0 10px #ffffff;
 }
-
 .title {
-    font-size: clamp(2rem, 5vw, 2.5rem); /* Responsive font size */
-    /* Removed pulse animation for performance */
+    font-size: 50pt;
+    animation: pulse 2s infinite;
 }
-
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
 .desc {
-    font-size: clamp(1rem, 3vw, 1.2rem); /* Responsive font size */
-    color: #ffff00;
+    font-size: 25pt;
+    color: #ffff00;
 }
-
 .joinbtn {
-    background: #ff69b4; /* Simplified to single color */
-    color: white;
-    border: none;
-    padding: 10px 20px; /* Reduced padding */
-    border-radius: 8px;
-    text-decoration: none;
-    box-shadow: 0 0 5px rgba(255,105,180,0.5); /* Simplified shadow */
+    background: linear-gradient(#ff69b4, #b266ff);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 0 15px #ff69b4;
 }
-
 .joinbtn:hover {
-    background: #e55a9f; /* Simplified hover effect */
+    transform: scale(1.1);
 }
-
 .games {
-    margin: 20px auto; /* Reduced margin */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px; /* Reduced gap */
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
 }
-
 .game-card {
-    background: rgba(255,255,255,0.1); /* Simplified background, no blur */
-    color: white;
-    padding: 15px; /* Reduced padding */
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 10px;
-    width: 90%; /* Responsive width */
-    max-width: 600px; /* Smaller max-width for mobile */
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3); /* Simplified shadow */
+    background: #ffffff1c;
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 30px;
+    border: 1px solid #ffffff3d;
+    border-radius: 20px;
+    width: 850px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(255,255,255,0.3);
 }
-
 .game-card h2 {
-    font-size: clamp(1.5rem, 4vw, 1.8rem); /* Responsive font size */
-    margin-bottom: 8px;
+    font-size: 30pt;
+    margin-bottom: 10px;
 }
-
 .game-card p {
-    font-size: clamp(0.9rem, 2.5vw, 1rem);
-    margin-bottom: 10px;
+    font-size: 16pt;
+    margin-bottom: 20px;
 }
-
 canvas {
-    border: 1px solid #ffffff; /* Thinner border */
-    border-radius: 8px;
-    background: #000000;
-    width: 100%; /* Responsive canvas */
-    max-width: 600px; /* Limit size for mobile */
-    height: auto; /* Maintain aspect ratio */
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    background: #000000;
 }
-
 .game-controls {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 10px; /* Reduced gap */
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
-
 .btn {
-    background: #b266ff; /* Single color for performance */
-    color: white;
-    border: none;
-    padding: 8px 16px; /* Reduced padding */
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 0 5px rgba(178,102,255,0.5); /* Simplified shadow */
+    background: linear-gradient(#d199ff, #b266ff);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #d199ff;
 }
-
 .btn:hover {
-    background: #9b55cc; /* Simplified hover effect */
+    transform: scale(1.05);
 }
-
 #carStatus, #footballScore {
-    margin-top: 8px;
-    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    margin-top: 10px;
+    font-size: 18pt;
 }
-
 #missionBoard {
-    margin-top: 10px;
-    text-align: left;
+    margin-top: 20px;
+    text-align: left;
 }
-
 #missionBoard h3 {
-    font-size: clamp(1rem, 3vw, 1.2rem);
+    font-size: 20pt;
 }
-
 #missionBoard ul {
-    list-style: disc;
-    padding-left: 15px;
+    list-style: disc;
+    padding-left: 20px;
 }
-
 .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7); /* Simplified background */
-    z-index: 1000;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00000080;
+    z-index: 1000;
 }
-
 .modal-content {
-    background: rgba(0,0,0,0.8); /* No blur for performance */
-    color: white;
-    margin: 20% auto; /* Adjusted margin for mobile */
-    padding: 15px;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 8px;
-    width: 85%;
-    max-width: 350px; /* Smaller modal for mobile */
-    text-align: center;
+    background: #000000a2;
+    backdrop-filter: blur(10px);
+    color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #ffffff3d;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
 }
-
 .close {
-    color: white;
-    float: right;
-    font-size: 24px;
-    cursor: pointer;
+    color: white;
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
 }
-
 .close:hover {
-    color: rgba(255,255,255,0.7);
+    color: #ffffff80;
 }
-
 .modal-content h2 {
-    margin-bottom: 15px;
-    font-size: clamp(1.2rem, 3.5vw, 1.4rem);
+    margin-bottom: 20px;
 }
-
 .modal-content form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
-
 .modal-content input, .modal-content select {
-    padding: 8px;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 5px;
-    background: rgba(255,255,255,0.1);
-    color: white;
+    padding: 10px;
+    border: 1px solid #ffffff3d;
+    border-radius: 5px;
+    background: #ffffff1c;
+    color: white;
 }
-
 .modal-content button {
-    background: #b266ff;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
+    background: linear-gradient(#d199ff, #b266ff);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }
-
 .modal-content button:hover {
-    background: #9b55cc;
+    transform: scale(1.05);
 }
-
 .a {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    color: white;
-    text-decoration: none;
-    font-size: clamp(0.8rem, 2vw, 0.9rem);
-}
-
-/* Media query for smaller screens */
-@media (max-width: 600px) {
-    .game-card {
-        padding: 10px;
-        width: 95%;
-    }
-    .navbar {
-        padding: 6px 12px;
-    }
-    .joinbtn {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
-    .btn {
-        padding: 6px 12px;
-        font-size: 0.9rem;
-    }
-    canvas {
-        max-width: 100%;
-    }
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    color: white;
+    text-decoration: none;
 }
